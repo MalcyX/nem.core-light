@@ -1,11 +1,13 @@
-NEM Core
-====================
-[![Build Status](https://travis-ci.org/NemProject/nem.core.svg?branch=master)](https://travis-ci.org/NemProject/nem.core)
+# NEM Core-light
+[![Build Status](https://travis-ci.org/g4s8/nem.core-light.svg?branch=master)](https://travis-ci.org/g4s8/nem.core-light)
 
-The NEM core is an important part for both NIS and NCC. Arguably one of the  most interesting parts would be org.nem.core.crypto, which includes all cryptographic procedures like signing and verifying of signatures.
+Light version of [nem.core](NemProject/nem.core) without connection, syncronization and async utils stuff - only `crypto`, `math` and `model` packages. Also unused depndencies removed.
 
-Above that core includes building blocks like Transactions, Blocks and Messages.
-
-compilation:
-
-    mvn install
+### install
+```xml
+<dependency>
+    <groupId>org.nem.core</groupId>
+    <artifactId>nem-core-light</artifactId>
+    <version>0.6.95-BETA.1</version>
+</dependency>
+```

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.nem.core</groupId>
   <artifactId>nem-core-light</artifactId>
-  <version>0.6.95-BETA</version>
+  <version>0.6.95-BETA.1</version>
   <packaging>jar</packaging>
   <name>NEM Core</name>
   <distributionManagement>
@@ -21,29 +21,24 @@
   <properties>
     <nemCodeBase>http://bob.nem.ninja/</nemCodeBase>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <tests.failsafe.skip>false</tests.failsafe.skip>
   </properties>
-
   <dependencies>
-
     <dependency>
       <groupId>com.googlecode.javaewah</groupId>
       <artifactId>JavaEWAH</artifactId>
       <version>1.0.0</version>
     </dependency>
-
     <dependency>
       <groupId>net.minidev</groupId>
       <artifactId>json-smart</artifactId>
       <version>1.2</version>
     </dependency>
-
     <dependency>
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcprov-jdk15on</artifactId>
       <version>1.58</version>
     </dependency>
-
-    <!-- commons -->
     <dependency>
       <groupId>commons-codec</groupId>
       <artifactId>commons-codec</artifactId>
@@ -59,8 +54,6 @@
       <artifactId>commons-math3</artifactId>
       <version>3.2</version>
     </dependency>
-
-    <!-- test related -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -79,13 +72,11 @@
       <version>1.0.1</version>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock</artifactId>
       <version>1.55</version>
       <scope>test</scope>
-
       <!-- Include everything below here if you have dependency conflicts -->
       <classifier>standalone</classifier>
       <exclusions>
@@ -132,7 +123,6 @@
       </exclusions>
     </dependency>
   </dependencies>
-
   <build>
     <resources>
       <resource>
@@ -164,7 +154,6 @@
           </testIncludes>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -173,7 +162,6 @@
           <sourcepath>${basedir}/src/main/java/org/nem/core</sourcepath>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -202,7 +190,6 @@
           </execution>
         </executions>
       </plugin>
-
       <!-- this adds test_integration, so that during test-compile phase they will be compiled, unfortunately, we can't specify target dir :/ -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -223,7 +210,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -236,6 +222,7 @@
         <configuration>
           <testSourceDirectory>src/it/java</testSourceDirectory>
           <failIfNoTests>true</failIfNoTests>
+          <skipTests>${tests.failsafe.skip}</skipTests>
         </configuration>
         <executions>
           <execution>
@@ -248,4 +235,52 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>no-it</id>
+      <properties>
+        <tests.failsafe.skip>true</tests.failsafe.skip>
+      </properties>
+    </profile>
+    <profile>
+      <id>publish</id>
+      <properties>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.10.4</version>
+            <executions>
+              <execution>
+                <id>attach-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <additionalparam>${javadoc.opts}</additionalparam>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

@@ -4,7 +4,7 @@ cache:
     - $HOME/.m2
 script:
   - set -e
-  - mvn clean install --errors --batch-mode --quiet
+  - mvn clean install --errors --batch-mode --quiet -Pno-it
   - mvn clean --quiet
 env:
   global:
